@@ -9,6 +9,12 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Set;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -61,6 +67,13 @@ public final class IronPipeBlockEntity extends BlockEntity {
         ItemStack filter = filters.get(side);
         return filter == null ? ItemStack.EMPTY : filter.copy();
     }
+    public boolean isExtractor() {
+        return getBlockState().getBlock() instanceof IronPipeBlock b && b.isExtractor();
+    }
+    public boolean isOutlet() {
+        return getBlockState().getBlock() instanceof IronPipeBlock b && b.isOutlet();
+    }
+    public Direction configuredFacing() { return getBlockState().getValue(IronPipeBlock.FACING); }
     public boolean isRouting() {
         return getBlockState().getBlock() instanceof IronPipeBlock block && block.isJunction();
     }
@@ -73,8 +86,13 @@ public final class IronPipeBlockEntity extends BlockEntity {
     }
     public static void serverTick(Level level, BlockPos pos, BlockState state, IronPipeBlockEntity be) {
         if (level.isClientSide || level.hasNeighborSignal(pos) || ++be.timer % 8 != 0) return;
-        if (be.contents.getStackInSlot(0).isEmpty()) be.tryPull(level, pos);
-        else be.tryPush(level, pos);
+        if (be.contents.getStackInSlot(0).isEmpty()) {
+            if (be.isExtractor()) be.tryPull(level, pos);
+        } else if (be.isOutlet()) {
+            be.eject(level, pos);
+        } else {
+            be.tryPush(level, pos);
+        }
     }
     private boolean allows(Direction direction, ItemStack item) {
         if (!isRouting() || filters.isEmpty()) return true;
@@ -84,62 +102,109 @@ public final class IronPipeBlockEntity extends BlockEntity {
             if (ItemStack.isSameItemSameTags(filter, item)) return false;
         return true;
     }
+
+    /*
+     * Look ahead through the pipe graph rather than blindly forwarding to the
+     * next pipe. This avoids circulating items around closed loops and gives
+     * junction filters an opportunity to choose a destination.
+     * Bounded BFS prevents unbounded work on very large networks.
+     */
+    private record RouteStep(BlockPos pos, Direction first, int depth) { }
+
+    @Nullable
+    private Direction routeToDestination(Level level, BlockPos start, ItemStack stack, @Nullable Direction blocked) {
+        ArrayDeque<RouteStep> queue = new ArrayDeque<>();
+        Set<BlockPos> visited = new HashSet<>();
+        queue.add(new RouteStep(start, null, 0));
+        visited.add(start);
+        while (!queue.isEmpty() && visited.size() <= 128) {
+            RouteStep step = queue.poll();
+            BlockEntity node = level.getBlockEntity(step.pos());
+            if (!(node instanceof IronPipeBlockEntity pipe)) continue;
+            for (Direction side : Direction.values()) {
+                if (step.depth() == 0 && side == blocked) continue;
+                if (!pipe.allows(side, stack)) continue;
+                BlockPos next = step.pos().relative(side);
+                if (visited.contains(next)) continue;
+                BlockEntity target = level.getBlockEntity(next);
+                Direction first = step.first() == null ? side : step.first();
+                if (target instanceof IronPipeBlockEntity other) {
+                    if (!other.contents.getStackInSlot(0).isEmpty()) continue;
+                    if (other.isOutlet()) return first;
+                    if (visited.size() < 128) {
+                        visited.add(next);
+                        queue.add(new RouteStep(next, first, step.depth() + 1));
+                    }
+                } else if (target != null) {
+                    IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, side.getOpposite()).orElse(null);
+                    if (handler == null) continue;
+                    for (int slot = 0; slot < handler.getSlots(); slot++) {
+                        if (handler.insertItem(slot, stack.copyWithCount(1), true).isEmpty()) return first;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     private void tryPush(Level level, BlockPos pos) {
         ItemStack item = contents.getStackInSlot(0);
         if (item.isEmpty()) return;
-        Direction[] sides = Direction.values();
-        for (int offset = 0; offset < sides.length; offset++) {
-            Direction direction = sides[(cursor + offset) % sides.length];
-            if (direction == incoming || !allows(direction, item)) continue;
-            BlockEntity neighbor = level.getBlockEntity(pos.relative(direction));
-            if (neighbor == null) continue;
-            if (neighbor instanceof IronPipeBlockEntity pipe) {
-                if (pipe.receive(item, direction.getOpposite())) { completeMove((cursor + offset + 1) % sides.length); return; }
-                continue;
-            }
-            LazyOptional<IItemHandler> optional = neighbor.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite());
-            IItemHandler handler = optional.orElse(null);
-            if (handler == null) continue;
+        Direction next = routeToDestination(level, pos, item, incoming);
+        if (next == null) return;
+        BlockEntity target = level.getBlockEntity(pos.relative(next));
+        if (target instanceof IronPipeBlockEntity pipe) {
+            if (pipe.receive(item, next.getOpposite())) completeMove();
+        } else if (target != null) {
+            IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, next.getOpposite()).orElse(null);
+            if (handler == null) return;
             for (int slot = 0; slot < handler.getSlots(); slot++) {
-                ItemStack remainder = handler.insertItem(slot, item.copyWithCount(1), false);
-                if (remainder.isEmpty()) { completeMove((cursor + offset + 1) % sides.length); return; }
-            }
-        }
-    }
-    private void completeMove(int nextCursor) {
-        contents.setStackInSlot(0, ItemStack.EMPTY);
-        incoming = null;
-        cursor = nextCursor;
-        setChanged();
-    }
-    private void tryPull(Level level, BlockPos pos) {
-        Direction[] sides = Direction.values();
-        for (int offset = 0; offset < sides.length; offset++) {
-            Direction side = sides[(cursor + offset) % sides.length];
-            BlockEntity neighbor = level.getBlockEntity(pos.relative(side));
-            if (neighbor == null || neighbor instanceof IronPipeBlockEntity) continue;
-            IItemHandler handler = neighbor.getCapability(ForgeCapabilities.ITEM_HANDLER, side.getOpposite()).orElse(null);
-            if (handler == null) continue;
-            for (int slot = 0; slot < handler.getSlots(); slot++) {
-                ItemStack test = handler.extractItem(slot, 1, true);
-                if (test.isEmpty()) continue;
-                // Pull only if at least one forward direction can accept this item.
-                if (!hasPotentialOutput(level, pos, side, test)) continue;
-                ItemStack extracted = handler.extractItem(slot, 1, false);
-                if (!extracted.isEmpty()) {
-                    receive(extracted, side);
-                    cursor = (cursor + offset + 1) % sides.length;
+                if (handler.insertItem(slot, item.copyWithCount(1), false).isEmpty()) {
+                    completeMove();
                     return;
                 }
             }
         }
     }
-    private boolean hasPotentialOutput(Level level, BlockPos pos, Direction source, ItemStack item) {
-        for (Direction target : Direction.values()) {
-            if (target != source && allows(target, item) && level.getBlockEntity(pos.relative(target)) != null) return true;
-        }
-        return false;
+
+    private void completeMove() {
+        contents.setStackInSlot(0, ItemStack.EMPTY);
+        incoming = null;
+        setChanged();
     }
+
+    private void tryPull(Level level, BlockPos pos) {
+        Direction intake = configuredFacing();
+        BlockEntity source = level.getBlockEntity(pos.relative(intake));
+        if (source == null || source instanceof IronPipeBlockEntity) return;
+        IItemHandler handler = source.getCapability(ForgeCapabilities.ITEM_HANDLER, intake.getOpposite()).orElse(null);
+        if (handler == null) return;
+        for (int slot = 0; slot < handler.getSlots(); slot++) {
+            ItemStack test = handler.extractItem(slot, 1, true);
+            if (test.isEmpty() || routeToDestination(level, pos, test, intake) == null) continue;
+            ItemStack extracted = handler.extractItem(slot, 1, false);
+            if (!extracted.isEmpty()) {
+                receive(extracted, intake);
+                return;
+            }
+        }
+    }
+
+    private void eject(Level level, BlockPos pos) {
+        ItemStack item = contents.getStackInSlot(0);
+        if (item.isEmpty()) return;
+        Direction side = configuredFacing();
+        double x = pos.getX() + .5 + side.getStepX() * .7;
+        double y = pos.getY() + .5 + side.getStepY() * .7;
+        double z = pos.getZ() + .5 + side.getStepZ() * .7;
+        ItemEntity dropped = new ItemEntity(level, x, y, z, item.copy());
+        dropped.setDeltaMovement(side.getStepX() * .14, side.getStepY() * .14 + .06, side.getStepZ() * .14);
+        if (level.addFreshEntity(dropped)) {
+            level.playSound(null, pos, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS, .25F, 1.35F);
+            completeMove();
+        }
+    }
+
     @Override protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("inventory", contents.serializeNBT());

@@ -31,11 +31,17 @@ public final class IronPipes {
             () -> new IronPipeBlock(false, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.5F).requiresCorrectToolForDrops().sound(net.minecraft.world.level.block.SoundType.METAL).noOcclusion()));
     public static final RegistryObject<Block> ROUTING_JUNCTION = BLOCKS.register("routing_junction",
             () -> new IronPipeBlock(true, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Block> IRON_EXTRACTOR = BLOCKS.register("iron_extractor",
+            () -> new IronPipeBlock(IronPipeBlock.Mode.EXTRACTOR, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F).requiresCorrectToolForDrops().sound(net.minecraft.world.level.block.SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Block> IRON_OUTLET = BLOCKS.register("iron_outlet",
+            () -> new IronPipeBlock(IronPipeBlock.Mode.OUTLET, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0F).requiresCorrectToolForDrops().sound(net.minecraft.world.level.block.SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Item> EXTRACTOR_ITEM = ITEMS.register("iron_extractor", () -> new BlockItem(IRON_EXTRACTOR.get(), new Item.Properties()));
+    public static final RegistryObject<Item> OUTLET_ITEM = ITEMS.register("iron_outlet", () -> new BlockItem(IRON_OUTLET.get(), new Item.Properties()));
     public static final RegistryObject<Item> PIPE_ITEM = ITEMS.register("iron_pipe", () -> new BlockItem(IRON_PIPE.get(), new Item.Properties()));
     public static final RegistryObject<Item> JUNCTION_ITEM = ITEMS.register("routing_junction", () -> new BlockItem(ROUTING_JUNCTION.get(), new Item.Properties()));
     public static final RegistryObject<BlockEntityType<IronPipeBlockEntity>> PIPE_ENTITY =
             BLOCK_ENTITIES.register("iron_pipe_entity", () ->
-                    BlockEntityType.Builder.of(IronPipeBlockEntity::new, IRON_PIPE.get(), ROUTING_JUNCTION.get()).build(null));
+                    BlockEntityType.Builder.of(IronPipeBlockEntity::new, IRON_PIPE.get(), ROUTING_JUNCTION.get(), IRON_EXTRACTOR.get(), IRON_OUTLET.get()).build(null));
 
     public IronPipes() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -49,6 +55,8 @@ public final class IronPipes {
         if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
             event.accept(PIPE_ITEM);
             event.accept(JUNCTION_ITEM);
+            event.accept(EXTRACTOR_ITEM);
+            event.accept(OUTLET_ITEM);
         }
     }
 }

@@ -22,6 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -29,6 +31,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public final class IronPipeBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public enum Mode { PIPE, JUNCTION, EXTRACTOR, OUTLET }
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
     public static final BooleanProperty EAST = BooleanProperty.create("east");
@@ -42,19 +46,24 @@ public final class IronPipeBlock extends BaseEntityBlock {
     private static final VoxelShape ARM_W = Block.box(0, 5, 5, 8, 11, 11);
     private static final VoxelShape ARM_U = Block.box(5, 8, 5, 11, 16, 11);
     private static final VoxelShape ARM_D = Block.box(5, 0, 5, 11, 8, 11);
-    private final boolean junction;
+    private final Mode mode;
 
     public IronPipeBlock(boolean junction, Properties properties) {
+        this(junction ? Mode.JUNCTION : Mode.PIPE, properties);
+    }
+    public IronPipeBlock(Mode mode, Properties properties) {
         super(properties);
-        this.junction = junction;
-        registerDefaultState(stateDefinition.any()
+        this.mode = mode;
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH)
                 .setValue(NORTH, false).setValue(SOUTH, false)
                 .setValue(EAST, false).setValue(WEST, false)
                 .setValue(UP, false).setValue(DOWN, false));
     }
-    public boolean isJunction() { return junction; }
+    public boolean isJunction() { return mode == Mode.JUNCTION; }
+    public boolean isExtractor() { return mode == Mode.EXTRACTOR; }
+    public boolean isOutlet() { return mode == Mode.OUTLET; }
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
+        builder.add(FACING, NORTH, SOUTH, EAST, WEST, UP, DOWN);
     }
     private static BooleanProperty property(Direction direction) {
         return switch(direction) {
@@ -76,7 +85,9 @@ public final class IronPipeBlock extends BaseEntityBlock {
         return state;
     }
     @Override public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext context) {
-        return refresh(defaultBlockState(), context.getLevel(), context.getClickedPos());
+        return refresh(defaultBlockState().setValue(FACING,
+                mode == Mode.EXTRACTOR ? context.getClickedFace().getOpposite() : context.getClickedFace()),
+                context.getLevel(), context.getClickedPos());
     }
     @Override public BlockState updateShape(BlockState state, Direction side, BlockState otherState,
                                             LevelAccessor level, BlockPos pos, BlockPos otherPos) {
@@ -84,7 +95,7 @@ public final class IronPipeBlock extends BaseEntityBlock {
     }
     @Override public RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
     @Override public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        VoxelShape s = junction ? Block.box(4,4,4,12,12,12) : CORE;
+        VoxelShape s = isJunction() ? Block.box(4,4,4,12,12,12) : CORE;
         if (state.getValue(NORTH)) s = Shapes.or(s, ARM_N);
         if (state.getValue(SOUTH)) s = Shapes.or(s, ARM_S);
         if (state.getValue(EAST)) s = Shapes.or(s, ARM_E);
@@ -100,7 +111,7 @@ public final class IronPipeBlock extends BaseEntityBlock {
     }
     @Override public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
                                             InteractionHand hand, BlockHitResult hit) {
-        if (!junction) return InteractionResult.PASS;
+        if (!isJunction()) return InteractionResult.PASS;
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
                     (windowId, inventory, ignored) -> new RoutingMenu(windowId, inventory, pos),
