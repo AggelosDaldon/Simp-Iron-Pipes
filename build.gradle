@@ -1,0 +1,38 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+version = '0.1.0'
+group = 'com.aggelosdaldon.simpleironpipes'
+base { archivesName = 'simple-iron-pipes-forge-1.20.1' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    copyIdeResources = true
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods { simple_iron_pipes { source sourceSets.main } }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+            mods { simple_iron_pipes { source sourceSets.main } }
+        }
+    }
+}
+repositories { mavenCentral() }
+dependencies { minecraft 'net.minecraftforge:forge:1.20.1-47.4.16' }
+tasks.named('jar', Jar).configure {
+    manifest.attributes([
+        'Specification-Title': 'Simple Iron Pipes',
+        'Specification-Vendor': 'AggelosDaldon',
+        'Implementation-Title': project.name,
+        'Implementation-Version': project.version,
+        'Implementation-Vendor': 'AggelosDaldon'
+    ])
+    finalizedBy 'reobfJar'
+}

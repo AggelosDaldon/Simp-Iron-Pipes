@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="simple_iron_pipes"
+version="0.1.0"
+displayName="Simple Iron Pipes"
+authors="AggelosDaldon"
+description='''An original iron pipe transport and directional item filtering system for Forge 1.20.1.'''
+[[dependencies.simple_iron_pipes]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.simple_iron_pipes]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.21)"
+ordering="NONE"
+side="BOTH"

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "simple_iron_pipes:iron_pipe",
+    "simple_iron_pipes:routing_junction"
+  ]
+}

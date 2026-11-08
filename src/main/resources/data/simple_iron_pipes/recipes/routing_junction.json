@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "IPI",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "simple_iron_pipes:iron_pipe"
+    }
+  },
+  "result": {
+    "item": "simple_iron_pipes:routing_junction",
+    "count": 1
+  }
+}
