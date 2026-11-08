@@ -1,9 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "metal": "minecraft:block/iron_block",
-    "trim": "minecraft:block/iron_trapdoor",
-    "particle": "minecraft:block/iron_block"
+    "metal": "simple_iron_pipes:block/brushed_iron",
+    "trim": "simple_iron_pipes:block/steel_band",
+    "particle": "simple_iron_pipes:block/brushed_iron"
   },
   "elements": [
     {
