@@ -95,7 +95,7 @@ public final class IronPipeBlock extends BaseEntityBlock {
     }
     @Override public RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
     @Override public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        VoxelShape s = isJunction() ? Block.box(4,4,4,12,12,12) : CORE;
+        VoxelShape s = (isJunction() || isExtractor() || isOutlet()) ? Block.box(4,4,4,12,12,12) : CORE;
         if (state.getValue(NORTH)) s = Shapes.or(s, ARM_N);
         if (state.getValue(SOUTH)) s = Shapes.or(s, ARM_S);
         if (state.getValue(EAST)) s = Shapes.or(s, ARM_E);

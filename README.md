@@ -1,25 +1,82 @@
 # Simple Iron Pipes
-An **independent**, original item transport mod for **Minecraft 1.20.1 Forge**.
+
+**Original iron pipe logistics mod for Minecraft 1.20.1, Forge 47.4.x and Java 17.**
+
+This repository contains an independent implementation with new block models,
+textures, item transport logic and a configurable routing interface. It is not
+a port of Simple Copper Pipes, and does not include its original source or assets.
 
 ## Blocks
-- **Iron Pipe:** six-direction connections, compact iron appearance, item-by-item inventory transport.
-- **Iron Routing Junction:** configurable per-face item routes, prioritizing matching destinations.
 
-## Configure junction filters
-1. Place a routing junction and connect several pipes.
-2. **Sneak + right-click a junction face with an item** to assign that item to that exit. The item is not consumed.
-3. **Sneak + right-click a face with an empty hand** to clear its filter.
-4. **Right-click empty-handed** to read active filters in chat.
-5. Routes with matching filters take precedence; unfiltered exits handle unassigned items.
+| Block | Purpose |
+| --- | --- |
+| **Iron Pipe** | Connects neighboring pipes and carries one item at a time. |
+| **Iron Extractor** | Pulls items from an attached inventory and feeds the pipe network. |
+| **Iron Routing Junction** | Selects an output direction based on item filters. |
+| **Iron Outlet** | Dispenses items into the world when there is no inventory endpoint. |
 
-This first build implements a single item per pipe at a time and a simple round-robin transport algorithm. Advanced inventory compatibility, loops, buffering, network scalability, filter UI, sounds and dedicated-server gameplay tests remain to be refined.
+All blocks connect in six directions. Copper, wax and oxidation are not part
+of the mod. Iron textures and steel accents are original pixel-art resources.
 
-## Build
-Requires Java 17, Gradle 8.8 and Forge 47.4.16.
-```sh
+## How to build a network
+
+1. Put a chest or other inventory in the world.
+2. Place an **Iron Extractor** against its face. The face clicked determines
+   which side the extractor pulls from (it pulls through the side touching the
+   block you placed it against).
+3. Connect an **Iron Pipe** chain to the extractor and a destination chest,
+   or attach an **Iron Outlet** to eject items. An outlet ejects in the
+   direction of the face against which it was placed.
+4. Add an **Iron Routing Junction** where the network splits.
+
+### Routing filters
+
+Right-click the **Iron Routing Junction** to open the 6-output GUI.
+
+- Pick an item up with the mouse from your inventory, then **left-click**
+  the desired direction's slot to copy it as a ghost filter.
+- **Right-click** a filter slot to clear it.
+- You keep the item: filters do not consume items.
+- Matching items prefer their explicitly assigned exits.
+- Unassigned items can use any otherwise unfiltered exit.
+- Filter choices are saved with the block entity and restored after reload.
+
+This initial implementation supports one exact-item filter per output
+direction, including item NBT. A pipe only forwards when a reachable
+inventory or outlet can accept its item. The graph search is bounded to 128
+pipe nodes per attempt to control server cost.
+
+### Redstone and inventory compatibility
+
+- Applying a redstone signal directly to a pipe, extractor, junction, or
+  outlet pauses that block's transport.
+- Uses the Forge item handler capability to interact with supported chests,
+  hoppers, barrels, modded inventories and other item handlers.
+- Insertion into an ordinary pipe from compatible item handlers is supported.
+- A pipe has an internal capacity of one item.
+
+## Recipes
+
+- 8 Iron Pipes: six iron ingots in two horizontal rows.
+- Routing Junction: four iron ingots surrounding an iron pipe.
+- Extractor: hopper and iron pipe combined with iron ingots.
+- Outlet: dropper and iron pipe combined with iron ingots.
+
+## Building
+
+```bash
 gradle build
 ```
-The compiled mod is in `build/libs`. GitHub Actions uploads a build on each commit.
 
-## Original implementation
-No source code, textures, models, or sound assets from Simple Copper Pipes are included. The models are purpose-built and use Minecraft's built-in iron material textures. This project is not a port of Simple Copper Pipes.
+Requires JDK 17 and Gradle 8.8. GitHub Actions compiles and publishes
+a ZIP artifact containing the mod JAR. Install the same JAR on client and server.
+
+## Status
+
+**Experimental gameplay build:** Builds successfully in GitHub Actions.
+In-world behavior and dedicated server compatibility should be tested on
+a fresh world before a public stable release. GUI, routing, ejection,
+saving and modded inventory compatibility require gameplay verification.
+
+The project deliberately does not claim that it is a copy of, or a Forge
+port of, another Minecraft mod.

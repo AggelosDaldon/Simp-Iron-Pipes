@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "simple_iron_pipes:block/junction_core"
+        "model": "simple_iron_pipes:block/extractor_core"
       }
     },
     {
