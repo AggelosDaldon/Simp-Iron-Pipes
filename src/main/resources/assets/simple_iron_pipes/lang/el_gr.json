@@ -1,4 +1,5 @@
 {
   "block.simple_iron_pipes.iron_pipe": "Σιδερένιος Σωλήνας",
-  "block.simple_iron_pipes.routing_junction": "Κόμβος Διαλογής Σιδήρου"
+  "block.simple_iron_pipes.routing_junction": "Κόμβος Διαλογής Σωλήνων",
+  "screen.simple_iron_pipes.routing": "Δρομολόγηση Αντικειμένων"
 }

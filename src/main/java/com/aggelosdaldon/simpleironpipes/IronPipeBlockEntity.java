@@ -57,6 +57,10 @@ public final class IronPipeBlockEntity extends BlockEntity {
         }
         return s.toString();
     }
+    public ItemStack getFilter(Direction side) {
+        ItemStack filter = filters.get(side);
+        return filter == null ? ItemStack.EMPTY : filter.copy();
+    }
     public boolean isRouting() {
         return getBlockState().getBlock() instanceof IronPipeBlock block && block.isJunction();
     }
@@ -68,7 +72,7 @@ public final class IronPipeBlockEntity extends BlockEntity {
         return true;
     }
     public static void serverTick(Level level, BlockPos pos, BlockState state, IronPipeBlockEntity be) {
-        if (level.isClientSide || ++be.timer % 8 != 0) return;
+        if (level.isClientSide || level.hasNeighborSignal(pos) || ++be.timer % 8 != 0) return;
         if (be.contents.getStackInSlot(0).isEmpty()) be.tryPull(level, pos);
         else be.tryPush(level, pos);
     }
@@ -76,7 +80,6 @@ public final class IronPipeBlockEntity extends BlockEntity {
         if (!isRouting() || filters.isEmpty()) return true;
         ItemStack assigned = filters.get(direction);
         if (assigned != null) return ItemStack.isSameItemSameTags(assigned, item);
-        // Unassigned sides are fallback routes only if no specifically matched filter exists.
         for (ItemStack filter : filters.values())
             if (ItemStack.isSameItemSameTags(filter, item)) return false;
         return true;

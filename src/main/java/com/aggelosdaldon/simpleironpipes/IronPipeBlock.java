@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -99,19 +101,12 @@ public final class IronPipeBlock extends BaseEntityBlock {
     @Override public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
                                             InteractionHand hand, BlockHitResult hit) {
         if (!junction) return InteractionResult.PASS;
-        ItemStack held = player.getItemInHand(hand);
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof IronPipeBlockEntity pipe && player instanceof ServerPlayer serverPlayer) {
-            Direction side = hit.getDirection();
-            if (player.isShiftKeyDown()) {
-                pipe.setFilter(side, held.isEmpty() ? ItemStack.EMPTY : held);
-                serverPlayer.displayClientMessage(Component.literal(held.isEmpty()
-                        ? "Cleared " + side.getName() + " route"
-                        : "Route " + side.getName() + " accepts " + held.getHoverName().getString()), true);
-            } else if (held.isEmpty()) {
-                serverPlayer.sendSystemMessage(Component.literal(pipe.describeFilters()));
-            } else return InteractionResult.PASS;
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
+                    (windowId, inventory, ignored) -> new RoutingMenu(windowId, inventory, pos),
+                    Component.translatable("screen.simple_iron_pipes.routing")), pos);
         }
-        return player.isShiftKeyDown() || held.isEmpty() ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
     @Override public void onRemove(BlockState oldState, Level level, BlockPos pos, BlockState newState, boolean moving) {
         if (!oldState.is(newState.getBlock())) {

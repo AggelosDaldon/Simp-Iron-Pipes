@@ -1,6 +1,5 @@
 {
   "block.simple_iron_pipes.iron_pipe": "Iron Pipe",
   "block.simple_iron_pipes.routing_junction": "Iron Routing Junction",
-  "item.simple_iron_pipes.iron_pipe": "Iron Pipe",
-  "item.simple_iron_pipes.routing_junction": "Iron Routing Junction"
+  "screen.simple_iron_pipes.routing": "Iron Pipe Routing"
 }
