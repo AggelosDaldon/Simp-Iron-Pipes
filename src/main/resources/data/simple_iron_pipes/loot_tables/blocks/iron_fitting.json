@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "simple_iron_pipes:routing_junction"
+          "name": "simple_iron_pipes:iron_fitting"
         }
       ],
       "conditions": [

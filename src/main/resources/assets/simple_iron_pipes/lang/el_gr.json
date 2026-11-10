@@ -1,9 +1,6 @@
 {
   "block.simple_iron_pipes.iron_pipe": "Σιδερένιος Σωλήνας",
-  "block.simple_iron_pipes.routing_junction": "Κόμβος Διαλογής Σωλήνων",
-  "screen.simple_iron_pipes.routing": "Δρομολόγηση Αντικειμένων",
-  "block.simple_iron_pipes.iron_extractor": "Σιδερένια Εξαγωγή",
-  "block.simple_iron_pipes.iron_outlet": "Σιδερένια Έξοδος",
   "itemGroup.simple_iron_pipes": "Σιδερένιοι Σωλήνες",
-  "subtitles.simple_iron_pipes.pipe": "Μεταφορά αντικειμένου σε σιδερένιο σωλήνα"
+  "subtitles.simple_iron_pipes.pipe": "Μεταφορά αντικειμένου σε σιδερένιο σωλήνα",
+  "block.simple_iron_pipes.iron_fitting": "Σιδερένια Σύνδεση"
 }

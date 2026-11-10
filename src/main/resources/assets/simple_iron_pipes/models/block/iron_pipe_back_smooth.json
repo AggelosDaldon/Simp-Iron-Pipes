@@ -1,0 +1,8 @@
+{
+  "parent": "simple_iron_pipes:block/shape_back_smooth",
+  "textures": {
+    "particle": "simple_iron_pipes:block/iron_pipe",
+    "side": "simple_iron_pipes:block/iron_pipe",
+    "front": "simple_iron_pipes:block/iron_pipe_front"
+  }
+}

@@ -1,97 +1,372 @@
 {
-  "multipart": [
-    {
-      "when": {
-        "north": "false",
-        "south": "false",
-        "east": "false",
-        "west": "false",
-        "up": "false",
-        "down": "false"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment"
-      }
+  "variants": {
+    "facing=north,front_connected=false,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain"
     },
-    {
-      "when": {
-        "OR": [
-          {
-            "north": "true"
-          },
-          {
-            "south": "true"
-          },
-          {
-            "east": "true"
-          },
-          {
-            "west": "true"
-          },
-          {
-            "up": "true"
-          },
-          {
-            "down": "true"
-          }
-        ]
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_fitting_center"
-      }
+    "facing=north,front_connected=false,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain"
     },
-    {
-      "when": {
-        "north": "true"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment"
-      }
+    "facing=north,front_connected=false,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth"
     },
-    {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment",
-        "y": 180
-      }
+    "facing=north,front_connected=false,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth"
     },
-    {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment",
-        "y": 90
-      }
+    "facing=north,front_connected=false,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back"
     },
-    {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment",
-        "y": 270
-      }
+    "facing=north,front_connected=false,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back"
     },
-    {
-      "when": {
-        "up": "true"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment",
-        "x": 270
-      }
+    "facing=north,front_connected=false,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth"
     },
-    {
-      "when": {
-        "down": "true"
-      },
-      "apply": {
-        "model": "simple_iron_pipes:block/iron_pipe_segment",
-        "x": 90
-      }
+    "facing=north,front_connected=false,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth"
+    },
+    "facing=north,front_connected=true,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward"
+    },
+    "facing=north,front_connected=true,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward"
+    },
+    "facing=north,front_connected=true,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward"
+    },
+    "facing=north,front_connected=true,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward"
+    },
+    "facing=north,front_connected=true,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double"
+    },
+    "facing=north,front_connected=true,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double"
+    },
+    "facing=north,front_connected=true,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double"
+    },
+    "facing=north,front_connected=true,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double"
+    },
+    "facing=south,front_connected=false,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "y": 180
+    },
+    "facing=south,front_connected=false,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 180
+    },
+    "facing=south,front_connected=true,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 180
+    },
+    "facing=east,front_connected=false,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "y": 90
+    },
+    "facing=east,front_connected=false,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 90
+    },
+    "facing=east,front_connected=true,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 90
+    },
+    "facing=west,front_connected=false,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "y": 270
+    },
+    "facing=west,front_connected=false,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 270
+    },
+    "facing=west,front_connected=true,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "y": 270
+    },
+    "facing=up,front_connected=false,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "x": 270
+    },
+    "facing=up,front_connected=false,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 270
+    },
+    "facing=up,front_connected=true,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 270
+    },
+    "facing=down,front_connected=false,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_plain",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_smooth",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "x": 90
+    },
+    "facing=down,front_connected=false,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_back_smooth",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=false,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=false,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=false,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=false,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_forward",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=true,smooth=false,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=true,smooth=false,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=true,smooth=true,powered=false": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 90
+    },
+    "facing=down,front_connected=true,back_connected=true,smooth=true,powered=true": {
+      "model": "simple_iron_pipes:block/iron_pipe_double",
+      "x": 90
     }
-  ]
+  }
 }
