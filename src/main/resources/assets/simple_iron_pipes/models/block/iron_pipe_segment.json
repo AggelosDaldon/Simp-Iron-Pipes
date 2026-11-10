@@ -1,0 +1,8 @@
+{
+  "parent": "simple_iron_pipes:block/iron_pipe_geometry",
+  "textures": {
+    "side": "simple_iron_pipes:block/iron_pipe",
+    "front": "simple_iron_pipes:block/iron_pipe_front",
+    "particle": "simple_iron_pipes:block/iron_pipe"
+  }
+}

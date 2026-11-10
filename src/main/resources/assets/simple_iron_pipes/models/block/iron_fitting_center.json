@@ -1,0 +1,7 @@
+{
+  "parent": "simple_iron_pipes:block/iron_fitting_geometry",
+  "textures": {
+    "texture": "simple_iron_pipes:block/iron_fitting",
+    "particle": "simple_iron_pipes:block/iron_fitting"
+  }
+}

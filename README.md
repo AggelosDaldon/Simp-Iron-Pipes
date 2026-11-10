@@ -2,9 +2,7 @@
 
 **Original iron pipe logistics mod for Minecraft 1.20.1, Forge 47.4.x and Java 17.**
 
-This repository contains an independent implementation with new block models,
-textures, item transport logic and a configurable routing interface. It is not
-a port of Simple Copper Pipes, and does not include its original source or assets.
+This repository contains independent item transport logic and a configurable routing interface. For its visual appearance, iron pipe and fitting geometry is reused under the MIT license from Simple Copper Pipes (Minecraft 1.20.1). Credits and license are in THIRD_PARTY_NOTICES.md.
 
 ## Blocks
 

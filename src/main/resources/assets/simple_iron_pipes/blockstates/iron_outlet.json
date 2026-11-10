@@ -1,8 +1,43 @@
 {
   "multipart": [
     {
+      "when": {
+        "north": "false",
+        "south": "false",
+        "east": "false",
+        "west": "false",
+        "up": "false",
+        "down": "false"
+      },
       "apply": {
-        "model": "simple_iron_pipes:block/outlet_core"
+        "model": "simple_iron_pipes:block/iron_pipe_segment"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "true"
+          },
+          {
+            "south": "true"
+          },
+          {
+            "east": "true"
+          },
+          {
+            "west": "true"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "down": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "simple_iron_pipes:block/iron_fitting_center"
       }
     },
     {
@@ -10,8 +45,7 @@
         "north": "true"
       },
       "apply": {
-        "model": "simple_iron_pipes:block/pipe_arm",
-        "x": 90
+        "model": "simple_iron_pipes:block/iron_pipe_segment"
       }
     },
     {
@@ -19,8 +53,8 @@
         "south": "true"
       },
       "apply": {
-        "model": "simple_iron_pipes:block/pipe_arm",
-        "x": 90
+        "model": "simple_iron_pipes:block/iron_pipe_segment",
+        "y": 180
       }
     },
     {
@@ -28,8 +62,7 @@
         "east": "true"
       },
       "apply": {
-        "model": "simple_iron_pipes:block/pipe_arm",
-        "x": 90,
+        "model": "simple_iron_pipes:block/iron_pipe_segment",
         "y": 90
       }
     },
@@ -38,9 +71,8 @@
         "west": "true"
       },
       "apply": {
-        "model": "simple_iron_pipes:block/pipe_arm",
-        "x": 90,
-        "y": 90
+        "model": "simple_iron_pipes:block/iron_pipe_segment",
+        "y": 270
       }
     },
     {
@@ -48,7 +80,8 @@
         "up": "true"
       },
       "apply": {
-        "model": "simple_iron_pipes:block/pipe_arm"
+        "model": "simple_iron_pipes:block/iron_pipe_segment",
+        "x": 270
       }
     },
     {
@@ -56,8 +89,8 @@
         "down": "true"
       },
       "apply": {
-        "model": "simple_iron_pipes:block/pipe_arm",
-        "x": 180
+        "model": "simple_iron_pipes:block/iron_pipe_segment",
+        "x": 90
       }
     }
   ]
