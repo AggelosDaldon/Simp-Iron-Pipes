@@ -5,9 +5,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraft.world.inventory.MenuType;
@@ -20,6 +22,18 @@ import net.minecraftforge.registries.RegistryObject;
 @Mod(IronPipes.MOD_ID)
 public final class IronPipes {
     public static final String MOD_ID = "simple_iron_pipes";
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
+    public static final RegistryObject<CreativeModeTab> IRON_PIPES_TAB =
+            CREATIVE_TABS.register("iron_pipes", () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.simple_iron_pipes"))
+                    .icon(() -> new ItemStack(PIPE_ITEM.get()))
+                    .displayItems((parameters, output) -> {
+                        output.accept(PIPE_ITEM.get());
+                        output.accept(JUNCTION_ITEM.get());
+                        output.accept(EXTRACTOR_ITEM.get());
+                        output.accept(OUTLET_ITEM.get());
+                    }).build());
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MOD_ID);
     public static final RegistryObject<MenuType<RoutingMenu>> ROUTING_MENU =
@@ -45,6 +59,7 @@ public final class IronPipes {
 
     public IronPipes() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        CREATIVE_TABS.register(bus);
         BLOCKS.register(bus);
         ITEMS.register(bus);
         MENUS.register(bus);
