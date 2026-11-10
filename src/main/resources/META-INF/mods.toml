@@ -3,7 +3,7 @@ loaderVersion="[47,)"
 license="All Rights Reserved (original code); upstream model and sound assets licensed separately under MIT (see THIRD_PARTY_NOTICES.txt)"
 [[mods]]
 modId="simple_iron_pipes"
-version="0.2.1"
+version="0.2.2"
 displayName="Simple Iron Pipes"
 authors="AggelosDaldon"
 description='''Two-block iron pipe item transport system for Minecraft Forge 1.20.1. Includes 5-slot Hopper GUIs, directional pipes and iron fittings.'''

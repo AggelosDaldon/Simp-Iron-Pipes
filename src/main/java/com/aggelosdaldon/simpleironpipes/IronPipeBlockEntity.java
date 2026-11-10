@@ -3,6 +3,7 @@ package com.aggelosdaldon.simpleironpipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -141,23 +142,41 @@ public final class IronPipeBlockEntity extends RandomizableContainerBlockEntity 
         return false;
     }
     private boolean dispenseToAir(Level level, BlockPos pos, Direction facing) {
+        // Create the item entirely outside the output block. Spawning at 0.6
+        // blocks from the pipe center makes the entity overlap the pipe lip and
+        // produces visible jitter, particularly at a water surface.
         BlockPos output = pos.relative(facing);
-        if (!level.getBlockState(output).isAir() && !level.getBlockState(output).getFluidState().isSource()) return false;
-        for (int slot = 0; slot < 5; slot++) {
-            ItemStack item = getItem(slot);
-            if (item.isEmpty()) continue;
+        var outputState = level.getBlockState(output);
+        boolean open = outputState.isAir() || outputState.getFluidState().is(FluidTags.WATER);
+        if (!open || !level.getWorldBorder().isWithinBounds(output)) return false;
+
+        for (int slot = 0; slot < getContainerSize(); slot++) {
+            ItemStack available = getItem(slot);
+            if (available.isEmpty()) continue;
+
             ItemStack released = removeItem(slot, 1);
-            ItemEntity dropped = new ItemEntity(level,
-                    pos.getX() + .5 + facing.getStepX() * .6,
-                    pos.getY() + .5 + facing.getStepY() * .6,
-                    pos.getZ() + .5 + facing.getStepZ() * .6,
-                    released);
-            dropped.setDeltaMovement(facing.getStepX() * .2,
-                    facing.getStepY() * .2, facing.getStepZ() * .2);
+            if (released.isEmpty()) continue;
+            // Offset is measured from the pipe block centre, not its boundary.
+            // 1.10 clears the block's collision box plus the item entity radius.
+            double x = pos.getX() + 0.5 + facing.getStepX() * 1.10;
+            double y = pos.getY() + 0.5 + facing.getStepY() * 1.10;
+            double z = pos.getZ() + 0.5 + facing.getStepZ() * 1.10;
+            ItemEntity dropped = new ItemEntity(level, x, y, z, released);
+
+            // A short, consistent forward impulse gives the item a clean
+            // departure without artificially disabling gravity or water drag.
+            double speed = 0.28;
+            dropped.setDeltaMovement(
+                    facing.getStepX() * speed,
+                    facing.getStepY() * speed + (facing.getAxis().isHorizontal() ? 0.06 : 0.0),
+                    facing.getStepZ() * speed);
+            dropped.setPickUpDelay(12);
             if (level.addFreshEntity(dropped)) {
-                level.playSound(null, pos, IronPipes.HEAVY_ITEM_LAUNCH_SOUND.get(), SoundSource.BLOCKS, .38F, .98F);
+                level.playSound(null, pos, IronPipes.HEAVY_ITEM_LAUNCH_SOUND.get(),
+                        SoundSource.BLOCKS, 0.38F, 0.98F);
                 return true;
             }
+            // Never delete an inventory item when entity spawning fails.
             setItem(slot, released);
             return false;
         }
