@@ -84,6 +84,16 @@ public final class IronPipeBlockEntity extends BlockEntity {
         setChanged();
         return true;
     }
+    private void playTransportSound(SoundEventKind kind) {
+        if (level == null || level.isClientSide) return;
+        switch (kind) {
+            case IN -> level.playSound(null, worldPosition, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.26F, 0.78F + level.random.nextFloat() * 0.18F);
+            case OUT -> level.playSound(null, worldPosition, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS, 0.22F, 1.35F + level.random.nextFloat() * 0.16F);
+            case TURN -> level.playSound(null, worldPosition, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.14F, 1.7F + level.random.nextFloat() * 0.1F);
+        }
+    }
+    private enum SoundEventKind { IN, OUT, TURN }
+
     public static void serverTick(Level level, BlockPos pos, BlockState state, IronPipeBlockEntity be) {
         if (level.isClientSide || level.hasNeighborSignal(pos) || ++be.timer % 8 != 0) return;
         if (be.contents.getStackInSlot(0).isEmpty()) {
@@ -154,12 +164,16 @@ public final class IronPipeBlockEntity extends BlockEntity {
         if (next == null) return;
         BlockEntity target = level.getBlockEntity(pos.relative(next));
         if (target instanceof IronPipeBlockEntity pipe) {
-            if (pipe.receive(item, next.getOpposite())) completeMove();
+            if (pipe.receive(item, next.getOpposite())) {
+                playTransportSound(SoundEventKind.TURN);
+                completeMove();
+            }
         } else if (target != null) {
             IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, next.getOpposite()).orElse(null);
             if (handler == null) return;
             for (int slot = 0; slot < handler.getSlots(); slot++) {
                 if (handler.insertItem(slot, item.copyWithCount(1), false).isEmpty()) {
+                    playTransportSound(SoundEventKind.OUT);
                     completeMove();
                     return;
                 }
@@ -185,6 +199,7 @@ public final class IronPipeBlockEntity extends BlockEntity {
             ItemStack extracted = handler.extractItem(slot, 1, false);
             if (!extracted.isEmpty()) {
                 receive(extracted, intake);
+                playTransportSound(SoundEventKind.IN);
                 return;
             }
         }
@@ -200,7 +215,7 @@ public final class IronPipeBlockEntity extends BlockEntity {
         ItemEntity dropped = new ItemEntity(level, x, y, z, item.copy());
         dropped.setDeltaMovement(side.getStepX() * .14, side.getStepY() * .14 + .06, side.getStepZ() * .14);
         if (level.addFreshEntity(dropped)) {
-            level.playSound(null, pos, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS, .25F, 1.35F);
+            playTransportSound(SoundEventKind.OUT);
             completeMove();
         }
     }
