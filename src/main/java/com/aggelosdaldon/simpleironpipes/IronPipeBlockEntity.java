@@ -86,13 +86,16 @@ public final class IronPipeBlockEntity extends BlockEntity {
     }
     private void playTransportSound(SoundEventKind kind) {
         if (level == null || level.isClientSide) return;
-        switch (kind) {
-            case IN -> level.playSound(null, worldPosition, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.26F, 0.78F + level.random.nextFloat() * 0.18F);
-            case OUT -> level.playSound(null, worldPosition, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS, 0.22F, 1.35F + level.random.nextFloat() * 0.16F);
-            case TURN -> level.playSound(null, worldPosition, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.14F, 1.7F + level.random.nextFloat() * 0.1F);
-        }
+        var sound = switch (kind) {
+            case IN -> IronPipes.ITEM_IN_SOUND.get();
+            case OUT -> IronPipes.ITEM_OUT_SOUND.get();
+            case TURN -> IronPipes.ITEM_TURN_SOUND.get();
+            case LAUNCH -> IronPipes.ITEM_LAUNCH_SOUND.get();
+        };
+        level.playSound(null, worldPosition, sound, SoundSource.BLOCKS, 0.45F,
+                0.95F + level.random.nextFloat() * 0.1F);
     }
-    private enum SoundEventKind { IN, OUT, TURN }
+    private enum SoundEventKind { IN, OUT, TURN, LAUNCH }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, IronPipeBlockEntity be) {
         if (level.isClientSide || level.hasNeighborSignal(pos) || ++be.timer % 8 != 0) return;
@@ -215,7 +218,7 @@ public final class IronPipeBlockEntity extends BlockEntity {
         ItemEntity dropped = new ItemEntity(level, x, y, z, item.copy());
         dropped.setDeltaMovement(side.getStepX() * .14, side.getStepY() * .14 + .06, side.getStepZ() * .14);
         if (level.addFreshEntity(dropped)) {
-            playTransportSound(SoundEventKind.OUT);
+            playTransportSound(SoundEventKind.LAUNCH);
             completeMove();
         }
     }

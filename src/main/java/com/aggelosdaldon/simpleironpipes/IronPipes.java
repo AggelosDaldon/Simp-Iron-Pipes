@@ -5,6 +5,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +24,14 @@ import net.minecraftforge.registries.RegistryObject;
 @Mod(IronPipes.MOD_ID)
 public final class IronPipes {
     public static final String MOD_ID = "simple_iron_pipes";
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MOD_ID);
+    public static final RegistryObject<SoundEvent> ITEM_IN_SOUND = sound("block.iron_pipe.item_in");
+    public static final RegistryObject<SoundEvent> ITEM_OUT_SOUND = sound("block.iron_pipe.item_out");
+    public static final RegistryObject<SoundEvent> ITEM_TURN_SOUND = sound("block.iron_pipe.turn");
+    public static final RegistryObject<SoundEvent> ITEM_LAUNCH_SOUND = sound("block.iron_pipe.launch");
+    private static RegistryObject<SoundEvent> sound(String name) {
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, name)));
+    }
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
@@ -59,6 +69,7 @@ public final class IronPipes {
 
     public IronPipes() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        SOUNDS.register(bus);
         CREATIVE_TABS.register(bus);
         BLOCKS.register(bus);
         ITEMS.register(bus);
