@@ -28,6 +28,11 @@ public final class IronPipes {
     public static final RegistryObject<SoundEvent> ITEM_OUT_SOUND = sound("block.iron_pipe.item_out");
     public static final RegistryObject<SoundEvent> ITEM_TURN_SOUND = sound("block.iron_pipe.turn");
     public static final RegistryObject<SoundEvent> ITEM_LAUNCH_SOUND = sound("block.iron_pipe.launch");
+    // New deeper iron-transfer sound events; original events remain for resource-pack compatibility.
+    public static final RegistryObject<SoundEvent> HEAVY_ITEM_IN_SOUND = sound("block.iron_pipe.heavy_item_in");
+    public static final RegistryObject<SoundEvent> HEAVY_ITEM_OUT_SOUND = sound("block.iron_pipe.heavy_item_out");
+    public static final RegistryObject<SoundEvent> HEAVY_ITEM_LAUNCH_SOUND = sound("block.iron_pipe.heavy_launch");
+    public static final RegistryObject<SoundEvent> HEAVY_ITEM_TURN_SOUND = sound("block.iron_pipe.heavy_turn");
     private static RegistryObject<SoundEvent> sound(String id) {
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, id)));
     }

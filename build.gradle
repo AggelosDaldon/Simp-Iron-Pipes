@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
-version = '0.2.0'
+version = '0.2.1'
 group = 'com.aggelosdaldon.simpleironpipes'
 base { archivesName = 'simple-iron-pipes-forge-1.20.1' }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

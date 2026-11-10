@@ -134,8 +134,8 @@ public final class IronPipeBlockEntity extends RandomizableContainerBlockEntity 
                 if (!returned.isEmpty()) level.addFreshEntity(new ItemEntity(level,
                         sourcePos.getX() + .5, sourcePos.getY() + .5, sourcePos.getZ() + .5, returned));
             }
-            level.playSound(null, worldPosition, intake ? IronPipes.ITEM_IN_SOUND.get() : IronPipes.ITEM_OUT_SOUND.get(),
-                    SoundSource.BLOCKS, .35F, .95F + level.random.nextFloat() * .1F);
+            level.playSound(null, worldPosition, intake ? IronPipes.HEAVY_ITEM_IN_SOUND.get() : IronPipes.HEAVY_ITEM_OUT_SOUND.get(),
+                    SoundSource.BLOCKS, .38F, .96F + level.random.nextFloat() * .05F);
             return true;
         }
         return false;
@@ -155,7 +155,7 @@ public final class IronPipeBlockEntity extends RandomizableContainerBlockEntity 
             dropped.setDeltaMovement(facing.getStepX() * .2,
                     facing.getStepY() * .2, facing.getStepZ() * .2);
             if (level.addFreshEntity(dropped)) {
-                level.playSound(null, pos, IronPipes.ITEM_LAUNCH_SOUND.get(), SoundSource.BLOCKS, .35F, 1F);
+                level.playSound(null, pos, IronPipes.HEAVY_ITEM_LAUNCH_SOUND.get(), SoundSource.BLOCKS, .38F, .98F);
                 return true;
             }
             setItem(slot, released);
