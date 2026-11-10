@@ -24,16 +24,6 @@ public final class IronPipes {
     public static final String MOD_ID = "simple_iron_pipes";
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
-    public static final RegistryObject<CreativeModeTab> IRON_PIPES_TAB =
-            CREATIVE_TABS.register("iron_pipes", () -> CreativeModeTab.builder()
-                    .title(Component.translatable("itemGroup.simple_iron_pipes"))
-                    .icon(() -> new ItemStack(PIPE_ITEM.get()))
-                    .displayItems((parameters, output) -> {
-                        output.accept(PIPE_ITEM.get());
-                        output.accept(JUNCTION_ITEM.get());
-                        output.accept(EXTRACTOR_ITEM.get());
-                        output.accept(OUTLET_ITEM.get());
-                    }).build());
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MOD_ID);
     public static final RegistryObject<MenuType<RoutingMenu>> ROUTING_MENU =
@@ -53,6 +43,16 @@ public final class IronPipes {
     public static final RegistryObject<Item> OUTLET_ITEM = ITEMS.register("iron_outlet", () -> new BlockItem(IRON_OUTLET.get(), new Item.Properties()));
     public static final RegistryObject<Item> PIPE_ITEM = ITEMS.register("iron_pipe", () -> new BlockItem(IRON_PIPE.get(), new Item.Properties()));
     public static final RegistryObject<Item> JUNCTION_ITEM = ITEMS.register("routing_junction", () -> new BlockItem(ROUTING_JUNCTION.get(), new Item.Properties()));
+    public static final RegistryObject<CreativeModeTab> IRON_PIPES_TAB =
+            CREATIVE_TABS.register("iron_pipes", () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.simple_iron_pipes"))
+                    .icon(() -> new ItemStack(PIPE_ITEM.get()))
+                    .displayItems((parameters, output) -> {
+                        output.accept(PIPE_ITEM.get());
+                        output.accept(JUNCTION_ITEM.get());
+                        output.accept(EXTRACTOR_ITEM.get());
+                        output.accept(OUTLET_ITEM.get());
+                    }).build());
     public static final RegistryObject<BlockEntityType<IronPipeBlockEntity>> PIPE_ENTITY =
             BLOCK_ENTITIES.register("iron_pipe_entity", () ->
                     BlockEntityType.Builder.of(IronPipeBlockEntity::new, IRON_PIPE.get(), ROUTING_JUNCTION.get(), IRON_EXTRACTOR.get(), IRON_OUTLET.get()).build(null));
@@ -64,14 +64,5 @@ public final class IronPipes {
         ITEMS.register(bus);
         MENUS.register(bus);
         BLOCK_ENTITIES.register(bus);
-        bus.addListener(this::addCreativeItems);
-    }
-    private void addCreativeItems(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
-            event.accept(PIPE_ITEM);
-            event.accept(JUNCTION_ITEM);
-            event.accept(EXTRACTOR_ITEM);
-            event.accept(OUTLET_ITEM);
-        }
     }
 }
