@@ -1,12 +1,12 @@
 # Third-party notices
 
-## Original pipe and fitting model geometry
+## Original pipe and fitting model geometry and transport audio
 
 The model geometry in:
 - `src/main/resources/assets/simple_iron_pipes/models/block/iron_pipe_geometry.json`
 - `src/main/resources/assets/simple_iron_pipes/models/block/iron_fitting_geometry.json`
 
-is adapted from the Minecraft 1.20.1 version of **Simple Copper Pipes** by Lunade Music (original source: https://github.com/AViewFromTheTop/SimpleCopperPipesMC). The model geometry is used under the MIT license reproduced below. The iron texture PNG files are user-supplied.
+and the original audio files in `src/main/resources/assets/simple_iron_pipes/sounds/block/iron_pipe/` are sourced from the Minecraft 1.20.1 version of **Simple Copper Pipes** by Lunade Music (original source: https://github.com/AViewFromTheTop/SimpleCopperPipesMC). The model geometry is used under the MIT license reproduced below. The iron texture PNG files are user-supplied.
 
 This reuse does **not** mean that the Simple Iron Pipes transport code is derived from the original project. It also does **not** guarantee CurseForge approval, which is subject to separate platform rules.
 

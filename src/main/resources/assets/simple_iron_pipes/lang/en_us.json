@@ -4,5 +4,6 @@
   "screen.simple_iron_pipes.routing": "Iron Pipe Routing",
   "block.simple_iron_pipes.iron_extractor": "Iron Pipe Extractor",
   "block.simple_iron_pipes.iron_outlet": "Iron Pipe Outlet",
-  "itemGroup.simple_iron_pipes": "Simple Iron Pipes"
+  "itemGroup.simple_iron_pipes": "Simple Iron Pipes",
+  "subtitles.simple_iron_pipes.pipe": "Iron pipe moves item"
 }

@@ -78,3 +78,12 @@ saving and modded inventory compatibility require gameplay verification.
 
 The project deliberately does not claim that it is a copy of, or a Forge
 port of, another Minecraft mod.
+
+
+### Transport sounds
+The iron pipe system plays item intake, outgoing item, turning and launching
+sounds during transport. The nine original transport OGG samples are reused
+from the Minecraft 1.20.1 Simple Copper Pipes project under the terms and
+attribution in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+These sounds are not newly authored by the Simple Iron Pipes developer.
